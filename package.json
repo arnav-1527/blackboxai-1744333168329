@@ -1,0 +1,36 @@
+{
+  "name": "medical-cabinet-app",
+  "version": "1.0.0",
+  "description": "3D Medicine Inventory System for macOS",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --mac",
+    "pack": "electron-builder --dir"
+  },
+  "author": "Arnav and Yashika",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.6.4"
+  },
+  "build": {
+    "appId": "com.medical.cabinet",
+    "productName": "MedTrack",
+    "mac": {
+      "category": "public.app-category.medical",
+      "target": "dmg",
+      "icon": "build/icon.icns"
+    },
+    "files": [
+      "**/*",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!build",
+      "!dist",
+      "!{.eslintrc.json,.gitignore}"
+    ]
+  }
+}

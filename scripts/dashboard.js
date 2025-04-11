@@ -568,11 +568,13 @@ function createMedicineBottles() {
             
             if (expiryDate < oneMonthFromNow) {
                 bottle.userData.isExpiringSoon = true;
-                alert(`Warning: ${medicine.name} is expiring soon!`);
+                // Add to notification queue instead of immediate alert
+                queueNotification(`Warning: ${medicine.name} is expiring soon!`);
             }
             
             if (medicine.quantity <= 10) {
-                alert(`Warning: Low stock for ${medicine.name}.`);
+                // Add to notification queue instead of immediate alert
+                queueNotification(`Warning: Low stock for ${medicine.name}.`);
             }
             
             scene.add(bottle);
@@ -819,9 +821,16 @@ function showMedicineDetails(medicine) {
     modal.classList.remove('hidden');
 }
 
+// Delete medicine function
 function deleteMedicine(medicineId) {
+    // Find the medicine to delete
+    const medicineToDelete = medicineInventory.find(medicine => medicine.id === medicineId);
+    
     // Filter out the medicine with the specified ID
     medicineInventory = medicineInventory.filter(medicine => medicine.id !== medicineId);
+    
+    // Notify user of successful deletion
+    queueNotification(`${medicineToDelete.name} has been removed from your inventory.`);
     
     // Update the table and 3D scene
     renderMedicineTable();
@@ -837,6 +846,7 @@ function deleteMedicine(medicineId) {
     }
 }
 
+// Add medicine function
 function addMedicine(formData) {
     // Generate a new unique ID
     const newId = Math.max(...medicineInventory.map(m => m.id), 0) + 1;
@@ -858,6 +868,9 @@ function addMedicine(formData) {
     
     // Add to inventory
     medicineInventory.unshift(newMedicine);
+    
+    // Notify user of successful addition
+    queueNotification(`${newMedicine.name} has been added to your inventory.`);
     
     // Update UI
     renderMedicineTable();

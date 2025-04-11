@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedTrack - Project Summary</title>
+    <style>
+        /* Basic reset and styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2563eb;
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #1e40af;
+            font-size: 22px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 5px;
+        }
+        h3 {
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+        .section {
+            background-color: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        code {
+            font-family: monospace;
+            background-color: #f1f5f9;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #f8fafc;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: monospace;
+            border: 1px solid #e2e8f0;
+            margin: 15px 0;
+        }
+        ul, ol {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        strong {
+            color: #2563eb;
+        }
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .tech-item {
+            background-color: #eff6ff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dbeafe;
+        }
+        .step {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .step-number {
+            background-color: #2563eb;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .footer {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.9em;
+            margin-top: 40px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+        }
+        @media print {
+            body {
+                font-size: 12pt;
+            }
+            h1 {
+                font-size: 24pt;
+            }
+            h2 {
+                font-size: 18pt;
+                margin-top: 0.8cm;
+            }
+            .section {
+                page-break-inside: avoid;
+                border: none;
+                box-shadow: none;
+            }
+            .break-after {
+                page-break-after: always;
+            }
+            a {
+                text-decoration: none;
+                color: #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MedTrack - 3D Medicine Cabinet for macOS</h1>
+        <p class="subtitle">Project Summary & Documentation</p>
+    </header>
+
+    <div class="section">
+        <h2>Project Overview</h2>
+        <p>
+            MedTrack is a native macOS application that helps users keep track of their medicine inventory through an interactive 3D visualization. 
+            The application converts a web interface into a native macOS app with system integration features.
+        </p>
+        <div style="text-align: center; margin: 20px 0;">
+            <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; display: inline-block;">
+                <div style="background-color: #e2e8f0; padding: 100px 150px; text-align: center; font-weight: bold; color: #64748b;">
+                    MedTrack 3D Medicine Cabinet Interface
+                </div>
+                <p style="text-align: center; font-size: 0.8em; color: #64748b; margin-top: 10px;">MedTrack 3D Medicine Cabinet Interface</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Key Features</h2>
+        <ul>
+            <li><strong>3D Interactive Cabinet:</strong> Visualize medicines in a virtual 3D cabinet</li>
+            <li><strong>Inventory Management:</strong> Add, update, and track medicine information</li>
+            <li><strong>Expiry Alerts:</strong> Get notified when medicines are expiring soon</li>
+            <li><strong>Low Stock Warnings:</strong> Alerts when medicines need to be restocked</li>
+            <li><strong>Native macOS Experience:</strong> Feels like a real Mac app, not a website</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Technologies Used</h2>
+        <div class="tech-grid">
+            <div class="tech-item">
+                <h3 style="margin-top: 0; color: #2563eb;">Electron</h3>
+                <p style="margin-bottom: 0; font-size: 0.9em;">Framework for creating native applications with web technologies</p>
+            </div>
+            <div class="tech-item">
+                <h3 style="margin-top: 0; color: #2563eb;">Three.js</h3>
+                <p style="margin-bottom: 0; font-size: 0.9em;">3D visualization library for the interactive cabinet</p>
+            </div>
+            <div class="tech-item">
+                <h3 style="margin-top: 0; color: #2563eb;">TailwindCSS</h3>
+                <p style="margin-bottom: 0; font-size: 0.9em;">Utility-first CSS framework for styling</p>
+            </div>
+            <div class="tech-item">
+                <h3 style="margin-top: 0; color: #2563eb;">Modern JavaScript</h3>
+                <p style="margin-bottom: 0; font-size: 0.9em;">ES6+ features for clean, maintainable code</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section break-after">
+        <h2>Project Structure</h2>
+        <pre>medical-cabinet-app/
+├── assets/               # Application assets and icons
+├── scripts/              
+│   ├── auth.js           # Authentication logic
+│   ├── dashboard.js      # Main dashboard and 3D visualization
+│   ├── login.js          # Login screen logic
+│   └── macos-integration.js # macOS native features
+├── index.html            # Login page
+├── dashboard.html        # Main dashboard page
+├── main.js               # Electron main process
+├── preload.js            # Secure bridge between Electron and web content
+├── package.json          # App configuration and dependencies
+└── build-macos.sh        # Build script for macOS</pre>
+    </div>
+
+    <div class="section">
+        <h2>How It Was Made</h2>
+        <ol>
+            <li>
+                <strong>Web Application Base:</strong>
+                <p>Built a web interface for medicine tracking using HTML, CSS (Tailwind) and JavaScript</p>
+            </li>
+            <li>
+                <strong>3D Visualization:</strong>
+                <p>Added an interactive 3D cabinet using Three.js where medicines are shown visually</p>
+            </li>
+            <li>
+                <strong>Electron Wrapper:</strong>
+                <p>Wrapped the web app in Electron to make it a native desktop application</p>
+            </li>
+            <li>
+                <strong>macOS Integration:</strong>
+                <p>Added macOS-specific features:</p>
+                <ul style="margin-left: 20px;">
+                    <li>Native window controls and menus</li>
+                    <li>System notifications for medicine alerts</li>
+                    <li>Keyboard shortcuts (Command+F for search, etc.)</li>
+                    <li>macOS styling and UI enhancements</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>How to Build and Run</h2>
+        <div>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3 style="margin-top: 0;">Prerequisites</h3>
+                    <p style="margin-bottom: 0;">Node.js and npm installed</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3 style="margin-top: 0;">Setup</h3>
+                    <p style="margin-bottom: 0;">Clone the repository and run <code>npm install</code></p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3 style="margin-top: 0;">Development</h3>
+                    <p style="margin-bottom: 0;">Run <code>npm start</code> to launch in development mode</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3 style="margin-top: 0;">Production Build</h3>
+                    <p style="margin-bottom: 0;">Run <code>./build-macos.sh</code> or <code>npm run build</code> to create the distributable app</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3 style="margin-top: 0;">Installation</h3>
+                    <p style="margin-bottom: 0;">Drag the built app to your Applications folder</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Usage</h2>
+        <ol>
+            <li>Launch the application</li>
+            <li>Log in with the demo credentials (admin/admin123)</li>
+            <li>View the 3D medicine cabinet and inventory</li>
+            <li>Add, update, or remove medicines as needed</li>
+            <li>Receive alerts for expiring or low-stock medicines</li>
+        </ol>
+    </div>
+
+    <div class="footer">
+        <p>© 2023 MedTrack - 3D Medicine Cabinet. Created by Arnav and Yashika</p>
+    </div>
+
+    <script>
+        // Print automatically when page loads
+        window.onload = function() {
+            window.print();
+        };
+    </script>
+</body>
+</html>

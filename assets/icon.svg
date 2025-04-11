@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#1e293b" />
+  
+  <!-- Cabinet body -->
+  <rect x="100" y="80" width="312" height="352" fill="#8b5a2b" />
+  
+  <!-- Cabinet doors -->
+  <rect x="110" y="90" width="145" height="332" fill="#5a3921" />
+  <rect x="265" y="90" width="137" height="332" fill="#5a3921" />
+  
+  <!-- Door handles -->
+  <circle cx="240" cy="256" r="8" fill="#d4af37" />
+  <circle cx="272" cy="256" r="8" fill="#d4af37" />
+  
+  <!-- Medicine bottles -->
+  <rect x="140" y="120" width="40" height="80" fill="#e74c3c" />
+  <rect x="145" y="110" width="30" height="15" fill="#ffffff" />
+  
+  <rect x="200" y="130" width="40" height="80" fill="#3498db" />
+  <rect x="205" y="120" width="30" height="15" fill="#ffffff" />
+  
+  <rect x="320" y="140" width="40" height="80" fill="#2ecc71" />
+  <rect x="325" y="130" width="30" height="15" fill="#ffffff" />
+  
+  <!-- Text -->
+  <text x="256" y="460" font-family="Arial" font-size="40" font-weight="bold" text-anchor="middle" fill="#ffffff">MedTrack</text>
+</svg>

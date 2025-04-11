@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arnav and Yashika's 3D Medical Cabinet - Dashboard</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Three.js for 3D visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+        }
+        #canvas-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background-color: #1e293b;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .expiring-soon {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { background-color: rgba(254, 202, 202, 0.5); }
+            50% { background-color: rgba(254, 202, 202, 0.9); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Session Check Script - Redirect if not logged in -->
+    <script>
+        if (!sessionStorage.getItem('loggedIn')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+
+    <!-- Main Container -->
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Navigation Bar -->
+        <nav class="bg-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <span class="font-bold text-xl text-blue-600">Arnav and Yashika's Medical Cabinet</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="text-gray-600">
+                            <i class="fas fa-user-md mr-1"></i>
+                            <span id="usernameDisplay">Welcome, User</span>
+                        </div>
+                        <button id="logoutButton" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
+                            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <div class="flex-grow py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Dashboard Header -->
+                <div class="pb-5 border-b border-gray-200 mb-6 flex justify-between items-center">
+                    <h1 class="text-2xl font-semibold text-gray-800">Medicine Inventory Dashboard</h1>
+                    <div class="flex gap-2">
+                        <button id="addMedicineBtn" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                            <i class="fas fa-plus mr-1"></i> Add Medicine
+                        </button>
+                        <button id="refreshBtn" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
+                            <i class="fas fa-sync-alt mr-1"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Dashboard Grid Layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- 3D Visualization - Takes 2/3 of screen on large displays -->
+                    <div class="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="p-4 border-b">
+                            <h2 class="text-lg font-medium text-gray-800">
+                                <i class="fas fa-cube mr-2"></i>3D Medicine Storage Visualization
+                            </h2>
+                            <p class="text-sm text-gray-500">Interactive 3D view of your medicine inventory</p>
+                        </div>
+                        <div id="canvas-container" class="relative">
+                            <!-- Canvas element for Three.js -->
+                            <canvas id="medicine-visualizer"></canvas>
+                            
+                            <!-- Controls overlay -->
+                            <div class="absolute bottom-4 right-4 bg-gray-800 bg-opacity-70 rounded-lg p-2 text-white text-xs">
+                                <div class="mb-1"><i class="fas fa-mouse mr-1"></i> Left-click + Drag: Rotate</div>
+                                <div class="mb-1"><i class="fas fa-expand-arrows-alt mr-1"></i> Scroll: Zoom</div>
+                                <div><i class="fas fa-hand-pointer mr-1"></i> Click on medicine: View Details</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Medicine Statistics -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="p-4 border-b">
+                            <h2 class="text-lg font-medium text-gray-800">
+                                <i class="fas fa-chart-pie mr-2"></i>Inventory Statistics
+                            </h2>
+                            <p class="text-sm text-gray-500">Overview of your medicine inventory</p>
+                        </div>
+                        <div class="p-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <!-- Total Medicines -->
+                                <div class="bg-blue-50 p-4 rounded-lg">
+                                    <div class="text-blue-500 text-xl font-bold" id="totalMedicines">0</div>
+                                    <div class="text-blue-700 text-sm">Total Medicines</div>
+                                </div>
+                                
+                                <!-- Low Stock -->
+                                <div class="bg-yellow-50 p-4 rounded-lg">
+                                    <div class="text-yellow-500 text-xl font-bold" id="lowStockCount">0</div>
+                                    <div class="text-yellow-700 text-sm">Low Stock</div>
+                                </div>
+                                
+                                <!-- Expiring Soon -->
+                                <div class="bg-red-50 p-4 rounded-lg">
+                                    <div class="text-red-500 text-xl font-bold" id="expiringSoonCount">0</div>
+                                    <div class="text-red-700 text-sm">Expiring Soon</div>
+                                </div>
+                                
+                                <!-- Available -->
+                                <div class="bg-green-50 p-4 rounded-lg">
+                                    <div class="text-green-500 text-xl font-bold" id="availableCount">0</div>
+                                    <div class="text-green-700 text-sm">Available</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Recently Added -->
+                            <div class="mt-6">
+                                <h3 class="text-md font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-clock mr-1"></i> Recently Added
+                                </h3>
+                                <div class="space-y-2 max-h-44 overflow-y-auto scrollbar-hide" id="recentlyAddedList">
+                                    <div class="text-gray-500 text-sm text-center py-4">Loading data...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medicine Inventory Table -->
+                <div class="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="p-4 border-b flex justify-between items-center">
+                        <h2 class="text-lg font-medium text-gray-800">
+                            <i class="fas fa-pills mr-2"></i>Medicine Inventory
+                        </h2>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input id="searchMedicine" type="text" placeholder="Search medicines..." 
+                                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Category
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Expiry Date
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Quantity
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Status
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="medicineTableBody" class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                        Loading medicine inventory...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-gray-200 mt-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="text-gray-500 text-sm">
+                        A Project of Bennett University
+                    </div>
+                    <div class="text-gray-500 text-sm">
+                        <span>Version 1.0.0</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Medicine Detail Modal -->
+    <div id="medicineDetailModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg overflow-hidden shadow-xl max-w-md w-full mx-4">
+            <div class="bg-blue-600 px-4 py-3 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-white" id="modalTitle">Medicine Details</h3>
+                <button id="closeModal" class="text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6" id="modalContent">
+                <div class="text-center py-8">Loading details...</div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 flex justify-end">
+                <button id="closeModalBtn" class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Medicine Modal -->
+    <div id="addMedicineModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg overflow-hidden shadow-xl max-w-md w-full mx-4">
+            <div class="bg-blue-600 px-4 py-3 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-white">Add New Medicine</h3>
+                <button id="closeAddModal" class="text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="addMedicineForm" class="p-6 space-y-4">
+                <div>
+                    <label for="medicineName" class="block text-sm font-medium text-gray-700">Medicine Name</label>
+                    <input type="text" id="medicineName" name="medicineName" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="medicineCategory" class="block text-sm font-medium text-gray-700">Category</label>
+                    <select id="medicineCategory" name="medicineCategory" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select a category</option>
+                        <option value="Antibiotics">Antibiotics</option>
+                        <option value="Analgesics">Analgesics</option>
+                        <option value="Antiviral">Antiviral</option>
+                        <option value="Antihistamines">Antihistamines</option>
+                        <option value="Vitamins">Vitamins & Supplements</option>
+                        <option value="OTC">Over-the-counter</option>
+                        <option value="Prescription">Prescription</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="medicineUses" class="block text-sm font-medium text-gray-700">Uses</label>
+                    <textarea id="medicineUses" name="medicineUses" rows="2" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="medicineQuantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+                        <input type="number" min="1" id="medicineQuantity" name="medicineQuantity" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="medicineExpiry" class="block text-sm font-medium text-gray-700">Expiry Date</label>
+                        <input type="date" id="medicineExpiry" name="medicineExpiry" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-plus mr-2"></i> Add Medicine
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/dashboard.js"></script>
+    <script src="scripts/macos-integration.js"></script>
+</body>
+</html>

@@ -6,6 +6,16 @@
 // Check if running in Electron environment
 const isElectron = window.electron !== undefined;
 
+function queueNotification(message) {
+    // Use native notifications
+    if (window.electron && window.electron.notifications) {
+        window.electron.notifications.showNotification('MedTrack Alert', message);
+    } else {
+        // Fallback to alert if notifications are not available
+        alert(message);
+    }
+}
+
 // Initialize macOS integration
 document.addEventListener('DOMContentLoaded', () => {
   if (!isElectron) return;

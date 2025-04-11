@@ -14,6 +14,8 @@
     "electron": "^28.1.0",
     "electron-builder": "^24.6.4"
   },
+  "dependencies": {
+  },
   "build": {
     "appId": "com.medical.cabinet",
     "productName": "MedTrack",
